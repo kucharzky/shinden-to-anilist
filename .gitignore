@@ -24,10 +24,9 @@ env/
 credentials.json
 secrets.*
 
-# Generated exports (may contain personal watch data)
+# Generated exports
+*_shinden_export.xml
 shinden_export.xml
-*.xml
-!tests/fixtures/*.xml
 
 # Logs & caches
 *.log

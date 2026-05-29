@@ -13,7 +13,6 @@ No accounts, passwords, or API keys are required. The script only reads public l
 
 ```bash
 cd ~/shinden-to-anilist
-source ~/.venv/bin/activate   # WSL venv
 pip install -r requirements.txt
 ```
 
@@ -25,19 +24,36 @@ Interactive (prompts for the list URL):
 python main.py
 ```
 
-With a URL (example list — “Oglądam” / watching):
+With a URL — by default **all** list sections are exported (watching, completed, on hold, dropped, plan, skip):
 
 ```bash
-python main.py "https://lista.shinden.pl/animelist/103810-teoroki"
+python main.py "https://lista.shinden.pl/animelist/123456-nickname"
 ```
 
-Export every status section (watching, completed, on hold, dropped, plan, skip):
+Output file name is derived from the user id in the URL and the status filter, e.g. `123456_all_shinden_export.xml`.
+
+Export a single section:
 
 ```bash
-python main.py "https://lista.shinden.pl/animelist/103810-teoroki" --all-statuses
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --watching
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --completed
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --on-hold
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --dropped
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --plan
+python main.py "https://lista.shinden.pl/animelist/123456-nickname" --skip
 ```
 
-Output defaults to `shinden_export.xml` in the current directory.
+| Flag | Output example |
+|------|----------------|
+| *(default)* | `123456_all_shinden_export.xml` |
+| `--watching` | `123456_watching_shinden_export.xml` |
+| `--completed` | `123456_completed_shinden_export.xml` |
+| `--on-hold` | `123456_on-hold_shinden_export.xml` |
+| `--dropped` | `123456_dropped_shinden_export.xml` |
+| `--plan` | `123456_plan_shinden_export.xml` |
+| `--skip` | `123456_skip_shinden_export.xml` |
+
+Override the file path with `-o path/to/file.xml`.
 
 ## How it works
 
@@ -61,7 +77,7 @@ Titles without a Jikan match are listed on stderr and omitted from the XML.
 
 1. Open [AniList → Settings → Import](https://anilist.co/settings/import)
 2. Choose **MyAnimeList**
-3. Upload `shinden_export.xml`
+3. Upload your generated `*_shinden_export.xml` file
 
 ## Project layout
 

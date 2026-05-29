@@ -5,8 +5,6 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
-from urllib.parse import urlparse
-
 import requests
 from bs4 import BeautifulSoup
 
@@ -256,18 +254,10 @@ def fetch_list_from_api(
     return rows
 
 
-def resolve_status_slugs(target: ListTarget, all_statuses: bool) -> list[str]:
-    if all_statuses or target.status_slug == "all":
-        return list(API_STATUSES)
-    if target.status_slug:
-        return [URL_STATUS_TO_API.get(target.status_slug, target.status_slug)]
-    return ["in-progress"]
-
-
 def collect_anime_rows(
     list_url: str,
     *,
-    all_statuses: bool = False,
+    status_slugs: list[str] | None = None,
     session: requests.Session | None = None,
 ) -> tuple[ListTarget, list[RawAnimeRow]]:
     target = parse_list_url(list_url)
@@ -280,8 +270,10 @@ def collect_anime_rows(
         if profile.get("userId") and int(profile["userId"]) != target.user_id:
             raise ValueError("URL user id does not match profile data from Shinden.")
 
-    slugs = resolve_status_slugs(target, all_statuses)
-    default_for_page = default_mal_status_for_slug(target.status_slug)
+    slugs = status_slugs if status_slugs is not None else list(API_STATUSES)
+    default_for_page = default_mal_status_for_slug(
+        slugs[0] if len(slugs) == 1 else None
+    )
 
     rows = parse_table_rows(html, default_for_page)
     if rows:
