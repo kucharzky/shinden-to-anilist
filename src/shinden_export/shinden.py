@@ -24,14 +24,15 @@ URL_STATUS_TO_API: dict[str, str] = {
 }
 
 # Polish sidebar labels (HTML) and API watchStatus values -> MAL status id
+# MAL / AniList: 1 = Watching, 2 = Completed, 3 = On Hold, 4 = Dropped, 6 = Plan
 POLISH_STATUS_TO_MAL: dict[str, int] = {
-    "obejrzane": 1,
-    "completed": 1,
-    "oglądam": 2,
-    "ogladam": 2,
-    "in progress": 2,
-    "in-progress": 2,
-    "inprogress": 2,
+    "obejrzane": 2,
+    "completed": 2,
+    "oglądam": 1,
+    "ogladam": 1,
+    "in progress": 1,
+    "in-progress": 1,
+    "inprogress": 1,
     "wstrzymane": 3,
     "hold": 3,
     "porzucone": 4,
@@ -166,8 +167,8 @@ def parse_table_rows(html: str, default_status: int) -> list[RawAnimeRow]:
 
 def _mal_to_api_watch_status(mal_status: int) -> str:
     return {
-        1: "completed",
-        2: "in progress",
+        1: "in progress",
+        2: "completed",
         3: "hold",
         4: "dropped",
         6: "plan",
@@ -176,16 +177,16 @@ def _mal_to_api_watch_status(mal_status: int) -> str:
 
 def default_mal_status_for_slug(slug: str | None) -> int:
     if not slug or slug == "all":
-        return 2
+        return 1
     mapping = {
-        "in-progress": 2,
-        "completed": 1,
+        "in-progress": 1,
+        "completed": 2,
         "hold": 3,
         "dropped": 4,
         "plan": 6,
         "skip": 4,
     }
-    return mapping.get(slug, 2)
+    return mapping.get(slug, 1)
 
 
 def fetch_api_page(

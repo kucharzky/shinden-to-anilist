@@ -65,8 +65,8 @@ Override the file path with `-o path/to/file.xml`.
 
 | Shinden | MAL `my_status` |
 |---------|-----------------|
-| Obejrzane / completed | 1 |
-| Oglądam / in progress | 2 |
+| Oglądam / in progress | 1 (Watching) |
+| Obejrzane / completed | 2 (Completed) |
 | Wstrzymane / hold | 3 |
 | Porzucone / dropped | 4 |
 | Planowane / plan | 6 |
